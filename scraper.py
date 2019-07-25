@@ -22,3 +22,15 @@
 # All that matters is that your final data is written to an SQLite database
 # called "data.sqlite" in the current working directory which has at least a table
 # called "data".
+
+
+import pandas as pd
+import sqlite3
+
+base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,error_bad_lines=False,sep=';',index_col='Rb.')
+
+conn = sqlite3.connect("test.sqlite")
+conn.execute("CREATE TABLE if not exists Data (Column1 TEXT, Column2 TEXT)")
+
+base_data.to_sql("Data", conn, if_exists='append', index=False)
+
