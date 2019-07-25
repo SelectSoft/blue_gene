@@ -6,4 +6,5 @@
 -e git+http://github.com/openaustralia/scraperwiki-python.git@morph_defaults#egg=scraperwiki
 
 lxml==3.4.4
+pandas==0.24.2
 cssselect==0.9.1
