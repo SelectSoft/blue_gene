@@ -29,8 +29,8 @@ import sqlite3
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,error_bad_lines=False,sep=';',index_col='Rb.')
 
-conn = sqlite3.connect("test.sqlite")
-conn.execute("CREATE TABLE if not exists Data (Column1 TEXT, Column2 TEXT)")
+conn = sqlite3.connect("data.sqlite")
+conn.execute("CREATE TABLE if not exists data (Column1 TEXT, Column2 TEXT)")
 
-base_data.to_sql("Data", conn, if_exists='append', index=False)
+base_data.to_sql("data", conn, if_exists='append', index=False)
 
