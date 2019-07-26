@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: ascii -*-
+
 # This is a template for a Python scraper on morph.io (https://morph.io)
 # including some code snippets below that you should find helpful
 
@@ -23,7 +26,6 @@
 # called "data.sqlite" in the current working directory which has at least a table
 # called "data".
 
-# -*- coding: utf-8 -*-
 
 import pandas as pd
 import sqlite3
