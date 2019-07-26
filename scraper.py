@@ -35,5 +35,5 @@ base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,err
 conn = sqlite3.connect("data.sqlite")
 conn.execute("CREATE TABLE if not exists data ('Naziv tijela', 'OIB', 'Adresa', 'Br. pošte', 'Grad', 'Telefon', 'Fax','Www', 'E-mail', 'Ime i prezime službenika', 'Tel. službenika','E-mail. službenika', 'Osnivač', 'Pravni status', 'Djelatnost','Zadnja izmjena')")
 
-base_data.to_sql("data", conn, if_exists='append', index=False)
+base_data.to_sql("data", conn, if_exists='replace', index=False)
 
