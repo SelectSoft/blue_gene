@@ -31,10 +31,11 @@ import pandas as pd
 import sqlite3
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,error_bad_lines=False,sep=';',index_col='Rb.')
+base_data.columns = ['entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated']
 
 conn = sqlite3.connect("data.sqlite")
-# Naziv tijela 
-conn.execute("CREATE TABLE if not exists data ('entity_name', 'OIB', 'Adresa', 'Br. pošte', 'Grad', 'Telefon', 'Fax','Www', 'E-mail', 'Ime i prezime službenika', 'Tel. službenika','E-mail. službenika', 'Osnivač', 'Pravni status', 'Djelatnost','Zadnja izmjena')")
+
+conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated')")
 
 base_data.to_sql("data", conn, if_exists='replace', index=False)
 
