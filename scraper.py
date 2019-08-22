@@ -129,11 +129,11 @@ allData = pd.concat([updated , new, removed]);
 
 # making tags 
 
-allData["tag_string"]=allData[['legal_status','founder','topics']].values.tolist() 
+# allData["tag_string"]=allData[['legal_status','founder','topics']].values.tolist() 
 
 
 conn = sqlite3.connect("data.sqlite")
 
-conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status','tag_string')")
+conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
 base_data.to_sql("allData", conn, if_exists='replace', index=False)
