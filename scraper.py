@@ -71,7 +71,7 @@ server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?ke
 
 # Seprating the OIB from tags
 
-server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
+# server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
 
 # Changes the dataType of OIB Column
 
