@@ -137,7 +137,7 @@ allData = pd.concat([updated , new, removed]);
 
 
 
-conn = sqlite3.connect("datasart.sqlite")
+conn = sqlite3.connect("data.sqlite")
 
 conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
