@@ -104,9 +104,9 @@ updated['status'] = 'updated'
 # ab = base_data.vat_number.isin(server_data.vat_number)
 
 # removed
-
 removed = server_data[~updatedFlagServer]
-
+removedflag = base_data['vat_number'].isin(removed['entity_name']) & (removed['entity_name'].notnull())
+removed = base_data[removedflag]
 
 removed["vat_number"]  = removed.vat_number.fillna(0)
 removed["vat_number"] = removed.vat_number.astype(np.int64)
