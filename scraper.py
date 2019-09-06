@@ -128,6 +128,9 @@ new["status"] = "new"
 
 allData = pd.concat([updated , new, removed]);
 
+allData["vat_number"]  = allData.vat_number.fillna(0)
+allData["vat_number"] = allData.vat_number.astype(np.int64)
+
 # making tags 
 
 # allData["tag_string"] =allData[['legal_status','founder','topics']].values.tolist() 
