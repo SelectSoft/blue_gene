@@ -59,8 +59,8 @@ base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,err
 
 # Changes the dataType of OIB Column
 
-base_data["OIB"]  = base_data.OIB.fillna(0)
-base_data["OIB"] = base_data.OIB.astype(np.int64)
+base_data["OIB"] =base_data.OIB.astype('str')
+
 
 # Changes the column name
 
@@ -128,8 +128,7 @@ new["status"] = "new"
 
 allData = pd.concat([updated , new, removed]);
 
-allData["vat_number"]  = allData.vat_number.fillna(0)
-allData["vat_number"] = allData.vat_number.astype(np.int64)
+allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', regex=True)
 
 # making tags 
 
