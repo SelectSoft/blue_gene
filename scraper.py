@@ -47,7 +47,6 @@ Created on Fri Jul 19 14:28:26 2019
 @author: Saifullah
 @email: saifullah.alam552@gmail.com
 """
-
 import pandas as pd
 import numpy as np       
 
@@ -55,12 +54,15 @@ import sqlite3
 
 # Scraping the Data
 
-base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download" ,error_bad_lines=False,sep=';',index_col='Rb.')
+base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download",converters={'OIB': lambda x: str(x)} ,error_bad_lines=False,sep=';',index_col='Rb.')
 
 # Changes the dataType of OIB Column
 
 base_data["OIB"] =base_data.OIB.astype('str')
 
+base_data['OIB'] = base_data['OIB'].replace({'':np.nan})
+
+base_data = base_data.dropna(subset=['OIB'])
 
 # Changes the column name
 
@@ -68,16 +70,14 @@ base_data.columns = ['entity_name', 'vat_number', 'postal_address', 'zip_code', 
 
 # Getting the data that is already in a server
 
-server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",error_bad_lines=False,sep=',')
-
+server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
+server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
 
 # server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
 
 # Changes the dataType of OIB Column
 
-server_data["vat_number"]  = server_data.vat_number.fillna(0)
-server_data["vat_number"] = server_data.vat_number.astype(np.int64)
 
 # a = base_data.vat_number.dropna()
 # b = server_data.vat_number.dropna()
@@ -87,15 +87,13 @@ server_data["vat_number"] = server_data.vat_number.astype(np.int64)
 
 # replace 0 to NaN
 
-server_data['vat_number'] = server_data['vat_number'].replace({ 0:np.nan})
-base_data['vat_number'] = base_data['vat_number'].replace({ 0:np.nan})
 
 # Updated    Data that is in both file come in updated 
 
 updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
 updated = server_data[updatedFlagServer]
-updatedFlag = base_data['vat_number'].isin(updated['vat_number']) & (updated['vat_number'].notnull())
-updated = base_data[updatedFlag]
+#updatedFlag = base_data['vat_number'].isin(updated['vat_number']) & (updated['vat_number'].notnull())
+#updated = base_data[updatedFlag]
 
 # Change status to update
 
@@ -105,11 +103,8 @@ updated['status'] = 'updated'
 
 # removed
 removed = server_data[~updatedFlagServer]
-removedflag = base_data['vat_number'].isin(removed['entity_name']) & (removed['entity_name'].notnull())
-removed = base_data[removedflag]
 
-removed["vat_number"]  = removed.vat_number.fillna(0)
-removed["vat_number"] = removed.vat_number.astype(np.int64)
+
 
 
 # Change status to removed
@@ -123,12 +118,12 @@ new = base_data[~newFlag]
 
 # Change status to new
 
-new["status"] = "new"
+new["status"] = "created"
 
 
 allData = pd.concat([updated , new, removed]);
 
-allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', regex=True)
+#allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', regex=True)
 
 # making tags 
 
@@ -137,7 +132,7 @@ allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', reg
 # changeing object to string 
 
 
-
+allData = allData.drop_duplicates(subset=['vat_number'], keep=False)
 
 conn = sqlite3.connect("data.sqlite")
 
