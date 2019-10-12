@@ -47,6 +47,7 @@ Created on Fri Jul 19 14:28:26 2019
 @author: Saifullah
 @email: saifullah.alam552@gmail.com
 """
+
 import pandas as pd
 import numpy as np       
 
@@ -56,6 +57,8 @@ import sqlite3
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download",converters={'OIB': lambda x: str(x)} ,error_bad_lines=False,sep=';',index_col='Rb.')
 
+# Making multiple columns 
+
 
 # Changes the dataType of OIB Column
 
@@ -64,12 +67,12 @@ base_data["OIB"] =base_data.OIB.astype('str')
 base_data['OIB'] = base_data['OIB'].replace({'':np.nan})
 
 base_data = base_data.dropna(subset=['OIB'])
-
+base_data = base_data.drop_duplicates(subset=['OIB'], keep=False)
 # Changes the column name
 
 base_data.columns = ['entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated']
 
-# Making multiple columns 
+
 
 base_data["email"] = base_data.email.fillna('')
 base_data["foi_officer_email"] = base_data.foi_officer_email.fillna('')
@@ -126,15 +129,20 @@ base_data["email"] = base_data.email.fillna(np.nan)
 base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
 base_data["website"] = base_data.website.fillna(np.nan)     
 
-
-
 # Getting the data that is already in a server
 
 server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
+
 server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
+
+base_data = base_data.reset_index()
+base_data = base_data.drop({'Rb.'},1)
+
+server_data = server_data.reset_index()
+server_data = server_data.drop({'index'},1)
 # server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
-server_data = base_data
+
 # Changes the dataType of OIB Column
 
 
