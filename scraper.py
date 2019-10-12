@@ -133,7 +133,7 @@ base_data["website"] = base_data.website.fillna(np.nan)
 server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
 server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
-
+server_data = base_data
 # server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
 
 # Changes the dataType of OIB Column
