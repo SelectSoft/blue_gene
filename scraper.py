@@ -56,6 +56,65 @@ import sqlite3
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download",converters={'OIB': lambda x: str(x)} ,error_bad_lines=False,sep=';',index_col='Rb.')
 
+# Making multiple columns 
+
+base_data["email"] = base_data.email.fillna('')
+base_data["foi_officer_email"] = base_data.foi_officer_email.fillna('')
+base_data["website"] = base_data.website.fillna('')
+
+try:
+    base_data[['email','email_1','email_2','email_3']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
+                     columns = ['email','email_1','email_2','email_3'])
+except:
+  try:
+       base_data[['email','email_1','email_2']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
+                     columns = ['email','email_1','email_2'])
+  except:
+      try:
+          base_data[['email','email_1']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
+                     columns = ['email','email_1'])   
+      except:
+          base_data['email'] = pd.DataFrame(base_data.email.str.split(';').tolist(),
+                     columns = ['email']) 
+          
+          
+try:
+    base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2','foi_officer_email_3']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
+                     columns = ['foi_officer_email','foi_officer_email_1','foi_officer_email_2','foi_officer_email_3'])
+except:
+  try:
+       base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
+                     columns = ['foi_officer_email','foi_officer_email_1','foi_officer_email_2'])
+  except:
+      try:
+          base_data[['foi_officer_email','foi_officer_email_1']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
+                     columns = ['foi_officer_email','foi_officer_email_1'])   
+      except:
+          base_data['foi_officer_email'] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
+                     columns = ['foi_officer_email'])   
+          
+try:
+    base_data[['website','website_1','website_2','website_3']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
+                     columns = ['website','website_1','website_2','website_3'])
+except:
+  try:
+       base_data[['website','website_1','website_2']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
+                     columns = ['website','website_1','website_2'])
+  except:
+      try:
+          base_data[['website','website_1']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
+                     columns = ['website','website_1'])   
+      except:
+          base_data['website'] = pd.DataFrame(base_data.website.str.split(';').tolist(),
+                     columns = ['website'])
+          
+    
+base_data["email"] = base_data.email.fillna(np.nan)
+base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
+base_data["website"] = base_data.website.fillna(np.nan)     
+
+
+
 # Changes the dataType of OIB Column
 
 base_data["OIB"] =base_data.OIB.astype('str')
