@@ -56,6 +56,19 @@ import sqlite3
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download",converters={'OIB': lambda x: str(x)} ,error_bad_lines=False,sep=';',index_col='Rb.')
 
+
+# Changes the dataType of OIB Column
+
+base_data["OIB"] =base_data.OIB.astype('str')
+
+base_data['OIB'] = base_data['OIB'].replace({'':np.nan})
+
+base_data = base_data.dropna(subset=['OIB'])
+
+# Changes the column name
+
+base_data.columns = ['entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated']
+
 # Making multiple columns 
 
 base_data["email"] = base_data.email.fillna('')
@@ -114,18 +127,6 @@ base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
 base_data["website"] = base_data.website.fillna(np.nan)     
 
 
-
-# Changes the dataType of OIB Column
-
-base_data["OIB"] =base_data.OIB.astype('str')
-
-base_data['OIB'] = base_data['OIB'].replace({'':np.nan})
-
-base_data = base_data.dropna(subset=['OIB'])
-
-# Changes the column name
-
-base_data.columns = ['entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated']
 
 # Getting the data that is already in a server
 
