@@ -152,8 +152,8 @@ server_data = server_data.drop({'index'},1)
 
 # Updated    Data that is in both file come in updated 
 
-updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
-updated = server_data[updatedFlagServer]
+updatedFlagServer = base_data['vat_number'].isin(server_data['vat_number']) & (server_data['vat_number'].notnull())
+updated = base_data[updatedFlagServer]
 #updatedFlag = base_data['vat_number'].isin(updated['vat_number']) & (updated['vat_number'].notnull())
 #updated = base_data[updatedFlag]
 
