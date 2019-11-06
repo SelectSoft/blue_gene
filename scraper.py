@@ -129,18 +129,19 @@ base_data["email"] = base_data.email.fillna(np.nan)
 base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
 base_data["website"] = base_data.website.fillna(np.nan)     
 
+base_data["status"] = "updated";
 # Getting the data that is already in a server
 
-server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
+# server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
 
-server_data["vat_number"] =server_data.vat_number.astype('str')
+# server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
 
-base_data = base_data.reset_index()
-base_data = base_data.drop({'Rb.'},1)
+# base_data = base_data.reset_index()
+# base_data = base_data.drop({'Rb.'},1)
 
-server_data = server_data.reset_index()
-server_data = server_data.drop({'index'},1)
+# server_data = server_data.reset_index()
+# server_data = server_data.drop({'index'},1)
 # server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
 
 # Changes the dataType of OIB Column
@@ -157,39 +158,39 @@ server_data = server_data.drop({'index'},1)
 
 # Updated    Data that is in both file come in updated 
 
-updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
-updated = server_data[updatedFlagServer]
+# updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
+# updated = server_data[updatedFlagServer]
 #updatedFlag = base_data['vat_number'].isin(updated['vat_number']) & (updated['vat_number'].notnull())
 #updated = base_data[updatedFlag]
 
 # Change status to update
 
-updated['status'] = 'updated'
+# updated['status'] = 'updated'
 
 # ab = base_data.vat_number.isin(server_data.vat_number)
 
 # removed
-removedflag = base_data['vat_number'].isin(server_data['vat_number'])
-removed = base_data[~removedflag]
+# removedflag = base_data['vat_number'].isin(server_data['vat_number'])
+# removed = base_data[~removedflag]
 
 
 
 
 # Change status to removed
 
-removed['status'] = "removed"
+# removed['status'] = "removed"
 
 # new
 
-newFlag = base_data['vat_number'].isin(server_data['vat_number'])  & (base_data['vat_number'].notnull())
-new = base_data[~newFlag]
+# newFlag = base_data['vat_number'].isin(server_data['vat_number'])  & (base_data['vat_number'].notnull())
+# new = base_data[~newFlag]
 
 # Change status to new
 
-new["status"] = "created"
+# new["status"] = "created"
 
 
-allData = pd.concat([updated , new, removed]);
+# allData = pd.concat([updated , new, removed]);
 
 #allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', regex=True)
 
@@ -200,10 +201,10 @@ allData = pd.concat([updated , new, removed]);
 # changeing object to string 
 
 
-allData = allData.drop_duplicates(subset=['vat_number'], keep=False)
+base_data = allData.drop_duplicates(subset=['vat_number'], keep=False)
 
 conn = sqlite3.connect("data.sqlite")
 
 conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
-allData.to_sql("data", conn, if_exists='replace', index=False)
+base_data.to_sql("data", conn, if_exists='replace', index=False)
