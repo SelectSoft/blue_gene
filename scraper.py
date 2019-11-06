@@ -48,6 +48,13 @@ Created on Fri Jul 19 14:28:26 2019
 @email: saifullah.alam552@gmail.com
 """
 
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Nov  6 01:10:23 2019
+
+@author: Saifullah
+"""
+
 import pandas as pd
 import numpy as np       
 
@@ -79,69 +86,56 @@ base_data["foi_officer_email"] = base_data.foi_officer_email.fillna('')
 base_data["website"] = base_data.website.fillna('')
 
 try:
-    base_data[['email','email_1','email_2','email_3']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
-                     columns = ['email','email_1','email_2','email_3'])
+    base_data[['email','email_1','email_2','email_3']] = pd.DataFrame(base_data.email.str.split(';',expand=True))
 except:
   try:
-       base_data[['email','email_1','email_2']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
-                     columns = ['email','email_1','email_2'])
+       base_data[['email','email_1','email_2']] = pd.DataFrame(base_data.email.str.split(';',expand=True))
   except:
       try:
-          base_data[['email','email_1']] = pd.DataFrame(base_data.email.str.split(';').tolist(),
-                     columns = ['email','email_1'])   
+          base_data[['email','email_1']] = pd.DataFrame(base_data.email.str.split(';',expand=True))
       except:
-          base_data['email'] = pd.DataFrame(base_data.email.str.split(';').tolist(),
-                     columns = ['email']) 
+          base_data['email'] = pd.DataFrame(base_data.email.str.split(';',expand=True))
           
           
 try:
-    base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2','foi_officer_email_3']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
-                     columns = ['foi_officer_email','foi_officer_email_1','foi_officer_email_2','foi_officer_email_3'])
+    base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2','foi_officer_email_3']] = pd.DataFrame(base_data.foi_officer_email.str.split(';',expand=True))
 except:
   try:
-       base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
-                     columns = ['foi_officer_email','foi_officer_email_1','foi_officer_email_2'])
+       base_data[['foi_officer_email','foi_officer_email_1','foi_officer_email_2']] = pd.DataFrame(base_data.foi_officer_email.str.split(';',expand=True))
   except:
       try:
-          base_data[['foi_officer_email','foi_officer_email_1']] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
-                     columns = ['foi_officer_email','foi_officer_email_1'])   
+          base_data[['foi_officer_email','foi_officer_email_1']] = pd.DataFrame(base_data.foi_officer_email.str.split(';',expand=True))
       except:
-          base_data['foi_officer_email'] = pd.DataFrame(base_data.foi_officer_email.str.split(';').tolist(),
-                     columns = ['foi_officer_email'])   
+          base_data['foi_officer_email'] = pd.DataFrame(base_data.foi_officer_email.str.split(';',expand=True))
           
 try:
-    base_data[['website','website_1','website_2','website_3']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
-                     columns = ['website','website_1','website_2','website_3'])
+    base_data[['website','website_1','website_2','website_3']] = pd.DataFrame(base_data.website.str.split(';',expand=True))
 except:
   try:
-       base_data[['website','website_1','website_2']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
-                     columns = ['website','website_1','website_2'])
+       base_data[['website','website_1','website_2']] = pd.DataFrame(base_data.website.str.split(';',expand=True))
   except:
       try:
-          base_data[['website','website_1']] = pd.DataFrame(base_data.website.str.split(';').tolist(),
-                     columns = ['website','website_1'])   
+          base_data[['website','website_1']] = pd.DataFrame(base_data.website.str.split(';',expand=True))
       except:
-          base_data['website'] = pd.DataFrame(base_data.website.str.split(';').tolist(),
-                     columns = ['website'])
+          base_data['website'] = pd.DataFrame(base_data.website.str.split(';',expand=True))
           
     
 base_data["email"] = base_data.email.fillna(np.nan)
 base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
 base_data["website"] = base_data.website.fillna(np.nan)     
 
-base_data["status"] = "updated";
 # Getting the data that is already in a server
 
-# server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
+server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
 
-# server_data["vat_number"] =server_data.vat_number.astype('str')
+server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
 
-# base_data = base_data.reset_index()
-# base_data = base_data.drop({'Rb.'},1)
+base_data = base_data.reset_index()
+base_data = base_data.drop({'Rb.'},1)
 
-# server_data = server_data.reset_index()
-# server_data = server_data.drop({'index'},1)
+server_data = server_data.reset_index()
+server_data = server_data.drop({'index'},1)
 # server_data["vat_number"] = server_data['tag_string'].str.extract('(\d+)')
 
 # Changes the dataType of OIB Column
@@ -158,39 +152,39 @@ base_data["status"] = "updated";
 
 # Updated    Data that is in both file come in updated 
 
-# updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
-# updated = server_data[updatedFlagServer]
+updatedFlagServer = server_data['vat_number'].isin(base_data['vat_number']) & (server_data['vat_number'].notnull())
+updated = server_data[updatedFlagServer]
 #updatedFlag = base_data['vat_number'].isin(updated['vat_number']) & (updated['vat_number'].notnull())
 #updated = base_data[updatedFlag]
 
 # Change status to update
 
-# updated['status'] = 'updated'
+updated['status'] = 'updated'
 
 # ab = base_data.vat_number.isin(server_data.vat_number)
 
 # removed
-# removedflag = base_data['vat_number'].isin(server_data['vat_number'])
-# removed = base_data[~removedflag]
+removedflag = base_data['vat_number'].isin(server_data['vat_number'])
+removed = base_data[~removedflag]
 
 
 
 
 # Change status to removed
 
-# removed['status'] = "removed"
+removed['status'] = "removed"
 
 # new
 
-# newFlag = base_data['vat_number'].isin(server_data['vat_number'])  & (base_data['vat_number'].notnull())
-# new = base_data[~newFlag]
+newFlag = base_data['vat_number'].isin(server_data['vat_number'])  & (base_data['vat_number'].notnull())
+new = base_data[~newFlag]
 
 # Change status to new
 
-# new["status"] = "created"
+new["status"] = "created"
 
 
-# allData = pd.concat([updated , new, removed]);
+allData = pd.concat([updated , new, removed]);
 
 #allData['vat_number'] = allData['vat_number'].astype(str).replace('\.0', '', regex=True)
 
@@ -201,10 +195,10 @@ base_data["status"] = "updated";
 # changeing object to string 
 
 
-base_data = base_data.drop_duplicates(subset=['vat_number'], keep=False)
+allData = allData.drop_duplicates(subset=['vat_number'], keep=False)
 
 conn = sqlite3.connect("data.sqlite")
 
 conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
-base_data.to_sql("data", conn, if_exists='replace', index=False)
+allData.to_sql("data", conn, if_exists='replace', index=False)
