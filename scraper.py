@@ -201,7 +201,7 @@ base_data["status"] = "updated";
 # changeing object to string 
 
 
-base_data = allData.drop_duplicates(subset=['vat_number'], keep=False)
+base_data = base_data.drop_duplicates(subset=['vat_number'], keep=False)
 
 conn = sqlite3.connect("data.sqlite")
 
