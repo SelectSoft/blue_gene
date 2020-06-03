@@ -125,8 +125,8 @@ base_data["foi_officer_email"] = base_data.foi_officer_email.fillna(np.nan)
 base_data["website"] = base_data.website.fillna(np.nan)     
 
 # Getting the data that is already in a server
-
-server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key=7hDDGSosf23K7474Bd4P&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
+my_secret_value = ENV['MORPH_MYSECRET']
+server_data = pd.read_csv("https://api.morph.io/SelectSoft/blue_gene/data.csv?key="+my_secret_value+"&query=select%20*%20from%20%22data%22",converters={'vat_number': lambda x: str(x)},error_bad_lines=False,sep=',')
 
 server_data["vat_number"] =server_data.vat_number.astype('str')
 # Seprating the OIB from tags
