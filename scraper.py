@@ -59,6 +59,7 @@ import pandas as pd
 import numpy as np       
 import os
 import sqlite3
+import re
 
 # Scraping the Data
 
@@ -202,3 +203,9 @@ conn = sqlite3.connect("data.sqlite")
 conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
 allData.to_sql("data", conn, if_exists='replace', index=False)
+
+def isValidEmail(email):
+ if len(email) > 7:
+  if re.match("^.+@([?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$", email) != None:
+   return True
+ return False
