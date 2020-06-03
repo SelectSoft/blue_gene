@@ -8,3 +8,4 @@
 # lxml==3.4.4
 # cssselect==0.9.1
 pandas==0.24.2
+validators==0.15.0
