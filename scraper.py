@@ -60,8 +60,24 @@ import numpy as np
 import os
 import sqlite3
 import re
+import validators
+import dateutil.parser as parser
 
 # Scraping the Data
+def isValidEmail(email):
+ if len(email) > 7:
+  if re.match("^.+@([?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?))$", email) != None:
+   return True
+ return False
+
+def isValidWebsite(web):
+    if not validators.url('http://'+web):
+        return False
+    return True
+
+def dateConvertor(date):
+    new_date = parser.parse(date)
+    return new_date.isoformat()
 
 base_data = pd.read_csv("http://tjv.pristupinfo.hr/?sort=1&page=1&download",converters={'OIB': lambda x: str(x)} ,error_bad_lines=False,sep=';',index_col='Rb.')
 
@@ -198,19 +214,28 @@ allData = pd.concat([updated , new, removed]);
 
 allData = allData.drop_duplicates(subset=['vat_number'], keep=False)
 
+allData['email_status'] = ""
+allData['website_status'] = ""
+allData = allData.reset_index()
+for x in range(len(allData)):
+    if(isValidEmail(allData['email'][x]) and isValidEmail(allData['foi_officer_email'][x])):
+        allData['email_status'][x] = "updated"
+         
+    else:
+        allData['email_status'][x] = "failed"
+    if(isValidWebsite(allData['website'][x])):
+        allData['website_status'][x]= "updated"
+    else:
+        allData['website_status'][x] = "failed"
+        if(not pd.isnull(allData['last_updated'][x])):
+            allData['last_updated'][x] = dateConvertor(allData['last_updated'][x])
+
 conn = sqlite3.connect("data.sqlite")
 
 conn.execute("CREATE TABLE if not exists data ('entity_name', 'vat_number', 'postal_address', 'zip_code', 'city', 'telephone', 'telefax','website', 'email', 'foi_officer_name', 'foi_officer_telephone','foi_officer_email', 'founder', 'legal_status', 'topics','last_updated','status')")
 
 allData.to_sql("data", conn, if_exists='replace', index=False)
 
-def isValidEmail(email):
- if len(email) > 7:
-  if re.match("^.+@([?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$", email) != None:
-   return True
- return False
 
-def isValidWebsite(web):
-    if not validators.url("http://google"):
-        return ''
-    return web
+
+
