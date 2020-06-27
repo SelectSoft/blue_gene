@@ -214,19 +214,31 @@ allData = pd.concat([updated , new, removed]);
 
 allData = allData.drop_duplicates(subset=['vat_number'], keep=False)
 
-allData['email_status'] = ""
-allData['website_status'] = ""
+allData['email_validation_pass'] = ""
+allData['website_validation_pass'] = ""
+allData['foi_officer_email_validation_pass'] = ""
 allData = allData.reset_index()
 for x in range(len(allData)):
-    if(isValidEmail(allData['email'][x]) and isValidEmail(allData['foi_officer_email'][x])):
-        allData['email_status'][x] = "updated"
-         
+    if(isValidEmail(allData['email'][x]) and allData['email'][x] ):
+        allData['email_validation_pass'][x] = "true"
+    elif(not allData['email'][x]):
+        allData['email_validation_pass'][x] = "nan"
     else:
-        allData['email_status'][x] = "failed"
-    if(isValidWebsite(allData['website'][x])):
-        allData['website_status'][x]= "updated"
+        allData['email_validation_pass'][x] = "fail"
+        
+    if(isValidEmail(allData['foi_officer_email'][x]) and allData['foi_officer_email'][x]):
+        allData['foi_officer_email_validation_pass'][x] = "true"
+    elif(not allData['foi_officer_email'][x]):
+        allData['foi_officer_email_validation_pass'][x] = "nan"
     else:
-        allData['website_status'][x] = "failed"
+        allData['foi_officer_email_validation_pass'][x] = "fail"
+        
+    if(isValidWebsite(allData['website'][x]) and allData['website'][x]):
+        allData['website_validation_pass'][x]= "true"
+    elif(not allData['website'][x]):
+        allData['website_validation_pass'][x] = "nan"
+    else:
+        allData['website_validation_pass'][x] = "fail"
         if(not pd.isnull(allData['last_updated'][x])):
             allData['last_updated'][x] = dateConvertor(allData['last_updated'][x])
 
